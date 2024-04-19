@@ -58,22 +58,22 @@ class InputsWidget(QtWidgets.QWidget):
         for name in self._inputs:
             parameter = parameter_objects[name]
             if parameter.ui_class is not None:
-                element = parameter.ui_class(parameter)
+                element = parameter.ui_class(parameter, **parameter.ui_kwargs)
 
             elif isinstance(parameter, parameters.FloatParameter):
-                element = ScientificInput(parameter)
+                element = ScientificInput(parameter, **parameter.ui_kwargs)
 
             elif isinstance(parameter, parameters.IntegerParameter):
-                element = IntegerInput(parameter)
+                element = IntegerInput(parameter, **parameter.ui_kwargs)
 
             elif isinstance(parameter, parameters.BooleanParameter):
-                element = BooleanInput(parameter)
+                element = BooleanInput(parameter, **parameter.ui_kwargs)
 
             elif isinstance(parameter, parameters.ListParameter):
-                element = ListInput(parameter)
+                element = ListInput(parameter, **parameter.ui_kwargs)
 
             elif isinstance(parameter, parameters.Parameter):
-                element = StringInput(parameter)
+                element = StringInput(parameter, **parameter.ui_kwargs)
 
             setattr(self, name, element)
 

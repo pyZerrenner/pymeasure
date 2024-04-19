@@ -32,6 +32,7 @@ class Parameter:
     :param name: The parameter name
     :param default: The default value
     :param ui_class: A Qt class to use for the UI of this parameter
+    :param ui_kwargs: A dict with keyword arguments passed to the ui_class
     :param group_by: Defines the Parameter(s) that controls the visibility
         of the associated input; can be a string containing the Parameter
         name, a list of strings with multiple Parameter names, or a dict
@@ -44,7 +45,7 @@ class Parameter:
         this argument is ignored.
     """
 
-    def __init__(self, name, default=None, ui_class=None, group_by=None, group_condition=True):
+    def __init__(self, name, default=None, ui_class=None, ui_kwargs={}, group_by=None, group_condition=True):
         self.name = name
         separator = ": "
         if separator in name:
@@ -56,6 +57,7 @@ class Parameter:
             self.value = default
         self.default = default
         self.ui_class = ui_class
+        self.ui_kwargs = ui_kwargs
         self._help_fields = [('units are', 'units'), 'default']
 
         self.group_by = {}

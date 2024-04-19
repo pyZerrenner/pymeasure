@@ -105,10 +105,29 @@ class StringInput(Input, QtWidgets.QLineEdit):
 class IntegerInput(Input, QtWidgets.QSpinBox):
     """
     Spin input box for integer values, connected to a :class:`IntegerParameter`.
-    """
 
-    def __init__(self, parameter, parent=None, **kwargs):
+    :param base: Base (radix) the integer is displayed in
+    :param base_prefix: String prefix to indicate the radix. Optional for bases 2, 8, 10 and 16.
+    """
+    _base_prefix_default = {2: 'b ', 8: 'o ', 10: '', 16: 'x '}
+
+    def __init__(self, parameter, parent=None, base=10, base_prefix=None, **kwargs):
         super().__init__(parameter=parameter, parent=parent, **kwargs)
+
+        if (base < 2) or (base > 36):
+            # QSpinBox displays bases > 36 and < 2 as decimal
+            base = 10
+            base_prefix = None
+        self.setDisplayIntegerBase(base)
+
+        if base_prefix is None:
+            try:
+                base_prefix = self._base_prefix_default[base]
+            except KeyError:
+                raise KeyError('No default prefix available for base '
+                               f'{base!r}. Set argument `base_prefix`.')
+        self.setPrefix(base_prefix)
+
         if parameter.step:
             self.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.UpDownArrows)
             self.setSingleStep(parameter.step)
